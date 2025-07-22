@@ -1,0 +1,11 @@
+[workspace]
+resolver = "2"
+members = [
+    "openblas-pthreads",
+]
+
+[workspace.package]
+edition = "2021"
+
+[profile.dev]
+opt-level = 2

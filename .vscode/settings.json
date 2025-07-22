@@ -1,0 +1,22 @@
+{
+    "rust-analyzer.server.extraEnv": {
+        "RAYON_NUM_THREADS": "4",
+        "CARGO_TARGET_DIR": "debug",
+    },
+    "rust-analyzer.cargo.extraEnv": {
+        "RAYON_NUM_THREADS": "4",
+        "CARGO_TARGET_DIR": "debug",
+    },
+    "rust-analyzer.runnables.extraEnv": {
+        "RAYON_NUM_THREADS": "4",
+        "CARGO_TARGET_DIR": "debug",
+    },
+    "rust-analyzer.cargo.features": [],
+    "rust-analyzer.cargo.noDefaultFeatures": true,
+    "mdx-preview.preview.useVscodeMarkdownStyles": true,
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer",
+        "editor.formatOnSave": true
+    },
+    "rust-analyzer.check.command": "clippy",
+}
