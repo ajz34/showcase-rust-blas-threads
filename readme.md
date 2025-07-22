@@ -29,7 +29,7 @@ This showcase repo tests BLAS threading control in rust:
 | 2025.1   |          | inner `MKL_Set_Num_Threads`            | -            | Changed |
 |          |          | outer `MKL_Set_Num_Threads_Local`      | Uncontrolled | Changed |
 |          |          | inner `MKL_Set_Num_Threads_Local`      | -            | -       |
-| BLIS     | Any      | outer `omp_set_num_threads`            | Uncontrolled | -       |
+| BLIS     | Any      | outer `omp_set_num_threads`            | Uncontrolled | Changed |
 | v2.0     |          | inner `omp_set_num_threads`            | Uncontrolled | -       |
 |          |          | outer `bli_thread_set_num_threads`     | Uncontrolled | Changed |
 |          |          | inner `bli_thread_set_num_threads`     | -            | -       |
