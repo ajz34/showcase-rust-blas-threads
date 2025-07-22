@@ -5,6 +5,7 @@ members = [
     "openblas-gomp",
     "openblas-pthreads-dyload",
     "openblas-gomp-dyload",
+    "mkl-dyload",
 ]
 
 [workspace.package]
