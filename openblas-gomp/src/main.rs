@@ -35,6 +35,49 @@ fn run_blas(a: &[f64], b: &[f64], c: &mut [f64]) {
     println!("[CPU] rayon thread id {thread_id:2}, wall time: {elapsed:8.2?}, process usage: {usage_p:.2}%");
 }
 
+fn test_outer_gomp_set() {
+    println!("=== Outer, GOMP set ===");
+
+    let [vec_a, vec_b, vec_c] = gen_vecs();
+    unsafe { omp_set_num_threads(1) };
+    (0..16).into_par_iter().for_each(|i| {
+        let thread_id = rayon::current_thread_index().unwrap_or(0);
+        println!("[Thread] iter {i:2} start, rayon thread id: {thread_id:2}");
+
+        let num_threads = unsafe { omp_get_max_threads() };
+        println!("[Thread] iter {i:2} omp_get_max_threads: {num_threads}");
+
+        let a = vec_a[i].lock().unwrap();
+        let b = vec_b[i].lock().unwrap();
+        let mut c = vec_c[i].lock().unwrap();
+        run_blas(&a, &b, &mut c);
+    });
+    let num_threads = unsafe { omp_get_max_threads() };
+    println!("[Process] threads after iteration: {num_threads}");
+}
+
+fn test_inner_gomp_set() {
+    println!("=== Inner, GOMP set ===");
+
+    let [vec_a, vec_b, vec_c] = gen_vecs();
+    (0..16).into_par_iter().for_each(|i| {
+        unsafe { omp_set_num_threads(1) };
+
+        let thread_id = rayon::current_thread_index().unwrap_or(0);
+        println!("[Thread] iter {i:2} start, rayon thread id: {thread_id:2}");
+
+        let num_threads = unsafe { omp_get_max_threads() };
+        println!("[Thread] iter {i:2} omp_get_max_threads: {num_threads}");
+
+        let a = vec_a[i].lock().unwrap();
+        let b = vec_b[i].lock().unwrap();
+        let mut c = vec_c[i].lock().unwrap();
+        run_blas(&a, &b, &mut c);
+    });
+    let num_threads = unsafe { omp_get_max_threads() };
+    println!("[Process] threads after iteration: {num_threads}");
+}
+
 fn test_outer_openblas_set() {
     println!("=== Outer, OpenBLAS set ===");
 
@@ -44,15 +87,15 @@ fn test_outer_openblas_set() {
         let thread_id = rayon::current_thread_index().unwrap_or(0);
         println!("[Thread] iter {i:2} start, rayon thread id: {thread_id:2}");
 
-        let num_threads = unsafe { openblas_get_num_threads() };
-        println!("[Thread] iter {i:2} openblas_get_num_threads: {num_threads}");
+        let num_threads = unsafe { omp_get_max_threads() };
+        println!("[Thread] iter {i:2} omp_get_max_threads: {num_threads}");
 
         let a = vec_a[i].lock().unwrap();
         let b = vec_b[i].lock().unwrap();
         let mut c = vec_c[i].lock().unwrap();
         run_blas(&a, &b, &mut c);
     });
-    let num_threads = unsafe { openblas_get_num_threads() };
+    let num_threads = unsafe { omp_get_max_threads() };
     println!("[Process] threads after iteration: {num_threads}");
 }
 
@@ -66,15 +109,15 @@ fn test_inner_openblas_set() {
         let thread_id = rayon::current_thread_index().unwrap_or(0);
         println!("[Thread] iter {i:2} start, rayon thread id: {thread_id:2}");
 
-        let num_threads = unsafe { openblas_get_num_threads() };
-        println!("[Thread] iter {i:2} openblas_get_num_threads: {num_threads}");
+        let num_threads = unsafe { omp_get_max_threads() };
+        println!("[Thread] iter {i:2} omp_get_max_threads: {num_threads}");
 
         let a = vec_a[i].lock().unwrap();
         let b = vec_b[i].lock().unwrap();
         let mut c = vec_c[i].lock().unwrap();
         run_blas(&a, &b, &mut c);
     });
-    let num_threads = unsafe { openblas_get_num_threads() };
+    let num_threads = unsafe { omp_get_max_threads() };
     println!("[Process] threads after iteration: {num_threads}");
 }
 
@@ -87,15 +130,15 @@ fn test_outer_openblas_set_local() {
         let thread_id = rayon::current_thread_index().unwrap_or(0);
         println!("[Thread] iter {i:2} start, rayon thread id: {thread_id:2}");
 
-        let num_threads = unsafe { openblas_get_num_threads() };
-        println!("[Thread] iter {i:2} openblas_get_num_threads: {num_threads}");
+        let num_threads = unsafe { omp_get_max_threads() };
+        println!("[Thread] iter {i:2} omp_get_max_threads: {num_threads}");
 
         let a = vec_a[i].lock().unwrap();
         let b = vec_b[i].lock().unwrap();
         let mut c = vec_c[i].lock().unwrap();
         run_blas(&a, &b, &mut c);
     });
-    let num_threads = unsafe { openblas_get_num_threads() };
+    let num_threads = unsafe { omp_get_max_threads() };
     println!("[Process] threads after iteration: {num_threads}");
 }
 
@@ -109,20 +152,20 @@ fn test_inner_openblas_set_local() {
         let thread_id = rayon::current_thread_index().unwrap_or(0);
         println!("[Thread] iter {i:2} start, rayon thread id: {thread_id:2}");
 
-        let num_threads = unsafe { openblas_get_num_threads() };
-        println!("[Thread] iter {i:2} openblas_get_num_threads: {num_threads}");
+        let num_threads = unsafe { omp_get_max_threads() };
+        println!("[Thread] iter {i:2} omp_get_max_threads: {num_threads}");
 
         let a = vec_a[i].lock().unwrap();
         let b = vec_b[i].lock().unwrap();
         let mut c = vec_c[i].lock().unwrap();
         run_blas(&a, &b, &mut c);
     });
-    let num_threads = unsafe { openblas_get_num_threads() };
+    let num_threads = unsafe { omp_get_max_threads() };
     println!("[Process] threads after iteration: {num_threads}");
 }
 
 fn main() {
-    println!("[== OpenBLAS pthreads ==]");
+    println!("[== OpenBLAS GOMP ==]");
     rayon::ThreadPoolBuilder::new().num_threads(4).build_global().unwrap();
 
     // print OpenBLAS configuration
@@ -137,6 +180,8 @@ fn main() {
     let mode = &args[1];
 
     match mode.as_str() {
+        "outer-gomp-set" => test_outer_gomp_set(),
+        "inner-gomp-set" => test_inner_gomp_set(),
         "outer-openblas-set" => test_outer_openblas_set(),
         "inner-openblas-set" => test_inner_openblas_set(),
         "outer-openblas-set-local" => test_outer_openblas_set_local(),
