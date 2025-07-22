@@ -23,10 +23,15 @@
 |          |          | inner `MKL_Set_Num_Threads`            | -            | Changed |
 |          |          | outer `MKL_Set_Num_Threads_Local`      | Uncontrolled | Changed |
 |          |          | inner `MKL_Set_Num_Threads_Local`      | -            | -       |
+| BLIS     | Any      | outer `omp_set_num_threads`            | Uncontrolled | -       |
+|          |          | inner `omp_set_num_threads`            | Uncontrolled | -       |
+|          |          | outer `bli_thread_set_num_threads`     | Uncontrolled | Changed |
+|          |          | inner `bli_thread_set_num_threads`     | -            | -       |
 
 - OpenBLAS with pthreads: use inner `openblas_set_num_threads` (all cases are actually the same);
 - OpenBLAS with OpenMP: use inner `omp_set_num_threads`;
-- MKL: use inner `MKL_Set_Num_Threads_Local`.
+- MKL: use inner `MKL_Set_Num_Threads_Local`;
+- BLIS: use inner `bli_thread_set_num_threads`.
 
 ## Additional thoughts
 
