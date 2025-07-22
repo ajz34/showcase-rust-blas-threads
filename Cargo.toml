@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "openblas-pthreads",
     "openblas-gomp",
+    "openblas-pthreads-dyload",
 ]
 
 [workspace.package]
