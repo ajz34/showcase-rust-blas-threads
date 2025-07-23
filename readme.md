@@ -43,3 +43,4 @@ This showcase repo tests BLAS threading control in rust:
 
 - For OpenBLAS with dynamic-loading, do not hybrid use openmp (clang v.s. gnu, different gnu's). Since libopenblas.so should also linked with OpenMP runtime, so there is actually no need to explicitly specify the libgomp.so or libomp.so. 
 - For MKL, the threading control function should be camel `MKL_Set_Num_Threads_Local`, instead of lower-case `mkl_set_num_threads`. Also see <https://stackoverflow.com/questions/28283112/using-mkl-set-num-threads-with-numpy>.
+- If two variables (of type `libloading::Library`) points to the same library, one changes the mutable static variable therin (like `openblas_set_num_threads`), and then another gets the changed static variable.

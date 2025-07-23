@@ -62,6 +62,11 @@ pub unsafe fn get_lib() -> &'static Lib {
     LIB.get_or_init(|| Lib::new("/home/a/Software/OpenBLAS-0.3.28-pthreads/lib/libopenblas.so").unwrap())
 }
 
+pub unsafe fn get_lib2() -> &'static Lib {
+    static LIB: std::sync::OnceLock<Lib> = std::sync::OnceLock::new();
+    LIB.get_or_init(|| Lib::new("/home/a/Software/OpenBLAS-0.3.28-pthreads/lib/libopenblas.so").unwrap())
+}
+
 pub unsafe fn dgemm(
     transa: *mut c_char,
     transb: *mut c_char,
@@ -221,9 +226,21 @@ fn test_inner_openblas_set_local() {
     println!("[Process] threads after iteration: {num_threads}");
 }
 
+fn test_two_libs() {
+    println!("=== Two libs ===");
+
+    unsafe { (get_lib().openblas_set_num_threads)(1) };
+    let num_threads = unsafe { (get_lib().openblas_get_num_threads)() };
+    println!("[Process] threads (lib1) after iteration: {num_threads}");
+    let num_threads2 = unsafe { (get_lib2().openblas_get_num_threads)() };
+    println!("[Process] threads (lib2) after iteration: {num_threads2}");
+}
+
 fn main() {
     println!("[== OpenBLAS pthreads ==]");
     rayon::ThreadPoolBuilder::new().num_threads(4).build_global().unwrap();
+
+    test_two_libs();
 
     // print OpenBLAS configuration
     unsafe {
