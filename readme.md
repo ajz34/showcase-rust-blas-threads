@@ -12,6 +12,7 @@ This showcase repo tests BLAS threading control in rust:
 - Inner: control thread inside rayon parallel region;
 - Effective: can we control the number of threads within the threshold by global number of rayon threads?
 - Threads Changed: for inner case, do that changes the number of threads visible from outside of rayon parallel region?
+- LAPACK Same: does typical LAPACK function (like `dsyevd`) threads controlled as that of BLAS?
 
 | BLAS | Threading | Controller | Effective | Threads Changed | LAPACK Same |
 |--|--|--|--|--|--|
@@ -33,7 +34,7 @@ This showcase repo tests BLAS threading control in rust:
 | v2.0     |          | inner `omp_set_num_threads`            | Uncontrolled | -       |
 |          |          | outer `bli_thread_set_num_threads`     | Uncontrolled | Changed |
 |          |          | inner `bli_thread_set_num_threads`     | -            | -       |
-| AOCL     | -        | inner `omp_set_num_threads`            | -            | -       | Yes |
+| AOCL     | -        | inner `bli_thread_set_num_threads`     | -            | -       | Yes |
 | KML      | OpenMP   | inner `KmlSetNumThreads`               | Uncontrolled | -       | Partially Controlled |
 | 24.0.0   |          | inner `BlasSetNumThreads`              | -            | Changed |
 |          |          | inner `BlasSetNumThreadsLocal`         | -            | -       | Uncontrolled |
