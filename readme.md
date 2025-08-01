@@ -33,13 +33,18 @@ This showcase repo tests BLAS threading control in rust:
 | v2.0     |          | inner `omp_set_num_threads`            | Uncontrolled | -       |
 |          |          | outer `bli_thread_set_num_threads`     | Uncontrolled | Changed |
 |          |          | inner `bli_thread_set_num_threads`     | -            | -       |
-| AOCL     | -        | outer `omp_set_num_threads`            | -            | -       | Yes |
+| AOCL     | -        | inner `omp_set_num_threads`            | -            | -       | Yes |
+| KML      | -        | inner `KmlSetNumThreads`               | Uncontrolled | -       | Partially Controlled |
+| 24.0.0   |          | inner `BlasSetNumThreads`              | -            | Changed |
+|          |          | inner `BlasSetNumThreadsLocal`         | -            | -       | Uncontrolled |
+|          |          | inner both `Blas...Local`/`Kml...`     | -            | -       | Yes |
 
-- OpenBLAS with pthreads: use inner `openblas_set_num_threads` (all cases are actually the same);
-- OpenBLAS with OpenMP: use inner `omp_set_num_threads`;
-- MKL: use inner `MKL_Set_Num_Threads_Local`;
-- BLIS: use inner `bli_thread_set_num_threads`;
-- AOCL: use inner `bli_thread_set_num_threads`.
+- OpenBLAS with pthreads: use inner `openblas_set_num_threads` (all cases are actually the same), but note main thread is affected;
+- OpenBLAS with OpenMP: use inner `omp_set_num_threads`, main thread unaffected;
+- MKL: use inner `MKL_Set_Num_Threads_Local`, main thread unaffected;
+- BLIS: use inner `bli_thread_set_num_threads`, main thread unaffected;
+- AOCL: use inner `bli_thread_set_num_threads`, main thread unaffected;
+- KML: use inner both `BlasSetNumThreadsLocal` and `KmlSetNumThreads`, main thread unaffected.
 
 ## Additional thoughts
 

@@ -8,6 +8,7 @@ members = [
     "mkl-dyload",
     "blis-gomp-dyload",
     "aocl-dyload",
+    "kml-dyload",
 ]
 
 [workspace.package]
