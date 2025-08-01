@@ -7,6 +7,7 @@ members = [
     "openblas-gomp-dyload",
     "mkl-dyload",
     "blis-gomp-dyload",
+    "aocl-dyload",
 ]
 
 [workspace.package]

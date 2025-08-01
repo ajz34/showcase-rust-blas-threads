@@ -13,14 +13,14 @@ This showcase repo tests BLAS threading control in rust:
 - Effective: can we control the number of threads within the threshold by global number of rayon threads?
 - Threads Changed: for inner case, do that changes the number of threads visible from outside of rayon parallel region?
 
-| BLAS | Threading | Controller | Effective | Threads Changed |
-|--|--|--|--|--|
+| BLAS | Threading | Controller | Effective | Threads Changed | LAPACK Same |
+|--|--|--|--|--|--|
 | OpenBLAS | pthreads | outer `openblas_set_num_threads`       | -            | Changed |
 | v0.3.28  |          | inner `openblas_set_num_threads`       | -            | Changed |
 |          |          | outer `openblas_set_num_threads_local` | -            | Changed |
 |          |          | inner `openblas_set_num_threads_local` | -            | Changed |
 | OpenBLAS | OpenMP   | outer `omp_set_num_threads`            | Uncontrolled | Changed |
-| v0.3.28  |          | inner `omp_set_num_threads`            | -            | -       |
+| v0.3.28  |          | inner `omp_set_num_threads`            | -            | -       | Yes |
 |          |          | outer `openblas_set_num_threads`       | Uncontrolled | -       |
 |          |          | inner `openblas_set_num_threads`       | Uncontrolled | -       |
 |          |          | outer `openblas_set_num_threads_local` | Uncontrolled | -       |
@@ -28,16 +28,18 @@ This showcase repo tests BLAS threading control in rust:
 | MKL      | TBB      | outer `MKL_Set_Num_Threads`            | -            | Changed |
 | 2025.1   |          | inner `MKL_Set_Num_Threads`            | -            | Changed |
 |          |          | outer `MKL_Set_Num_Threads_Local`      | Uncontrolled | Changed |
-|          |          | inner `MKL_Set_Num_Threads_Local`      | -            | -       |
+|          |          | inner `MKL_Set_Num_Threads_Local`      | -            | -       | Yes |
 | BLIS     | Any      | outer `omp_set_num_threads`            | Uncontrolled | Changed |
 | v2.0     |          | inner `omp_set_num_threads`            | Uncontrolled | -       |
 |          |          | outer `bli_thread_set_num_threads`     | Uncontrolled | Changed |
 |          |          | inner `bli_thread_set_num_threads`     | -            | -       |
+| AOCL     | -        | outer `omp_set_num_threads`            | -            | -       | Yes |
 
 - OpenBLAS with pthreads: use inner `openblas_set_num_threads` (all cases are actually the same);
 - OpenBLAS with OpenMP: use inner `omp_set_num_threads`;
 - MKL: use inner `MKL_Set_Num_Threads_Local`;
-- BLIS: use inner `bli_thread_set_num_threads`.
+- BLIS: use inner `bli_thread_set_num_threads`;
+- AOCL: use inner `bli_thread_set_num_threads`.
 
 ## Additional thoughts
 
