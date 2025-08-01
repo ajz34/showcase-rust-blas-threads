@@ -34,7 +34,7 @@ This showcase repo tests BLAS threading control in rust:
 |          |          | outer `bli_thread_set_num_threads`     | Uncontrolled | Changed |
 |          |          | inner `bli_thread_set_num_threads`     | -            | -       |
 | AOCL     | -        | inner `omp_set_num_threads`            | -            | -       | Yes |
-| KML      | -        | inner `KmlSetNumThreads`               | Uncontrolled | -       | Partially Controlled |
+| KML      | OpenMP   | inner `KmlSetNumThreads`               | Uncontrolled | -       | Partially Controlled |
 | 24.0.0   |          | inner `BlasSetNumThreads`              | -            | Changed |
 |          |          | inner `BlasSetNumThreadsLocal`         | -            | -       | Uncontrolled |
 |          |          | inner both `Blas...Local`/`Kml...`     | -            | -       | Yes |
